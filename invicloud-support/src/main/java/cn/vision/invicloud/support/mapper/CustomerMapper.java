@@ -26,6 +26,13 @@ public interface CustomerMapper extends BaseMapper<Customer> {
      */
     CustomerVO getByCustomerToken(@Param("customerToken")String customerToken);
 
+
+    /**
+     *根据传入的customer对象执行insert操作
+     * @param customer 顾客对象
+     * @return
+     * */
+    Integer insert(@Param("customer")Customer customer);
     /**
      * 根据用户ID查找用户显示信息
      * @param customerId 用户ID
@@ -37,9 +44,12 @@ public interface CustomerMapper extends BaseMapper<Customer> {
     /**
      * 根据顾客等级分页显示信息
      * @param pageInfo 分页信息
-     * @param rank 顾客等级
+     * @param noble 顾客等级
      * @param rowBounds 分页实体
      * @return
      */
-    List<CustomerVO> listByPage(@Param("pageInfo") PageInfo pageInfo, @Param("rank") Integer rank, RowBounds rowBounds);
+    List<CustomerVO> listByPage(@Param("pageInfo") PageInfo pageInfo, @Param("noble") Integer noble, RowBounds rowBounds);
+
+    //返回即将被注册的userid
+    Integer getLastestPlusCustomerId();
 }

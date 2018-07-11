@@ -14,7 +14,7 @@
 * Wspanialy Marzena - $10.00
 * Pascual Nicolas - $10.00
 * Ejaz Hassan - $10.00
-* Hines Frank - $100.00
+* Hines Fnoble - $100.00
 * Triana Vega Luis - $10.00
 * PROMOTUX DI FRANCESCO MELONI E C. S.N.C. - $15.00
 * Emmanuel Kielichowski - $15.00

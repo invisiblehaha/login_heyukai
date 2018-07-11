@@ -21,7 +21,7 @@ public interface ICustomerService extends IService<Customer> {
      * @param customer 顾客信息
      * @return
      */
-    Integer insertCustomer(Customer customer);
+    Integer insertCustomer(Customer customer) throws Exception;
 
     /**
      * 根据人脸标识查找顾客信息
@@ -40,9 +40,12 @@ public interface ICustomerService extends IService<Customer> {
     /**
      * 根据顾客等级(可)分页显示顾客
      * @param pageInfo
-     * @param rank
+     * @param noble
      * @return
      */
 
-    BasePageDTO<CustomerVO> listByPage(PageInfo pageInfo, Integer rank);
+    BasePageDTO<CustomerVO> listByPage(PageInfo pageInfo, Integer noble);
+
+    //返回返回即将被注册的userid
+    Integer getLastestPlusCustomerId();
 }

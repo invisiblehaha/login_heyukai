@@ -79,7 +79,7 @@ lead: pages.donate.lead
         <li>Wspanialy Marzena - $10.00</li>
         <li>Pascual Nicolas - $10.00</li>
         <li>Ejaz Hassan - $10.00</li>
-        <li>Hines Frank - $100.00</li>
+        <li>Hines Fnoble - $100.00</li>
         <li>Triana Vega Luis - $10.00</li>
         <li>PROMOTUX DI FRANCESCO MELONI E C. S.N.C. - $15.00</li>
         <li>Emmanuel Kielichowski - $15.00</li>
