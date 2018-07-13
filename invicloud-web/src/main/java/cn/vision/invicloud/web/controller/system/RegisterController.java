@@ -68,7 +68,8 @@ public class RegisterController {
         if(InterfaceOfAllAPIs.searchForUserId(buff,"FS_1")!=Key.KEY_FOR_SEARCH_MATCHFAILED_MESSAGE)
         {
             return new WebResult(RegisterReturnCode.FACE_REGISTER_TWICE);
-        }
+        }//如果是同一张人脸，则不允许重复注册
+
         Calendar cal = Calendar.getInstance();
 
         Integer theCustomerId = customerService.getLastestPlusCustomerId()+1;//从数据库中获取最新的id + 1,即预备绑定给用户的id

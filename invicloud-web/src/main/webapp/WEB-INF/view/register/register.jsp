@@ -62,6 +62,8 @@
         <input id="imgfile" type="file" name="userUploadImg" onchange="changeImg()"/>
         <img id="imgid" height="200" width="200" src="${pageContext.request.contextPath}/static/images/initial.jpg" alt="userUploadImg"/>
         <br><br><br><br><br><br>
+        <button type="button" id="startCamera" onclick="start_Camera();">打开摄像头</button>
+        <%--<button type="button" id="endCamera" onclick="end_Camera();">关闭摄像头</button>--%>
         <video autoplay></video>
         <canvas id="myCanvas" ></canvas>
         <button type="button" id="capture">拍照</button>
@@ -77,46 +79,6 @@
     function hasUserMedia(){//判断是否支持调用设备api，因为浏览器不同所以判断方式不同哦
         return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
     }
-
-    if(hasUserMedia()) {
-        //alert(navigator.mozGetUserMedia)
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        var video = document.querySelector("video");
-        var canvas = document.querySelector("canvas");
-        var streaming = false;
-        navigator.getUserMedia({
-            video: true,//开启视频
-            audio: false//先关闭音频，因为会有回响，以后两台电脑通信不会有响声
-        }, function (stream) {//将视频流交给video
-            video.src = window.URL.createObjectURL(stream);
-            streaming = true;
-        }, function (err) {
-            console.log("capturing", err)
-        });
-        var img1;
-        var UserUpload = false;
-        document.querySelector("#capture").addEventListener("click", function (event) {
-            if (streaming) {
-                img1 = canvas.toDataURL("image/png");
-                var context = canvas.getContext('2d');
-                context.fillStyle="#ffffff";
-                context.beginPath();
-                context.fillRect(0,0,canvas.width,canvas.height);
-                context.closePath();
-
-                //画出摄像头捕捉的图像
-                context.drawImage(video, 0, 0,300,150);
-                //将获取的图片base64信息封装在info中
-                UserUpload = true;
-            }
-        })
-    }else{
-        alert("no support");
-    }
-
-
-
-
 
     window.onload=function()
     {
@@ -141,6 +103,57 @@
         };
         reader.readAsDataURL(file);
     }
+
+
+    var streaming = false;
+    var mediaStreamTrack;
+    var video = document.querySelector("video");
+    function start_Camera() {
+
+        if (hasUserMedia()) {
+            //alert(navigator.mozGetUserMedia)
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+
+
+
+            navigator.getUserMedia({
+                video: true,//开启视频
+                audio: false//先关闭音频，因为会有回响，以后两台电脑通信不会有响声
+            }, function (stream) {//将视频流交给video
+                video.src = window.URL.createObjectURL(stream);
+                streaming = true;
+                video.play();
+            }, function (err) {
+                console.log("capturing", err)
+            });
+        }
+    }
+    var img1;
+    var UserUpload = false;
+    document.querySelector("#capture").addEventListener("click", function (event) {
+        if (streaming) {
+            var canvas = document.querySelector("canvas");
+            img1 = canvas.toDataURL("image/png");
+            var context = canvas.getContext('2d');
+            context.fillStyle="#ffffff";
+            context.beginPath();
+            context.fillRect(0,0,canvas.width,canvas.height);
+            context.closePath();
+
+            //画出摄像头捕捉的图像
+            context.drawImage(video, 0, 0,300,150);
+            //将获取的图片base64信息封装在info中
+            UserUpload = true;
+        }
+    })
+
+    function end_Camera()
+    {
+        //关不掉，不会了
+    }
+
+
     function checkUser() {
         var userName = document.getElementById("userName").value;
         var password = document.getElementById("userPassword").value;
