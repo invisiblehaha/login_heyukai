@@ -2,6 +2,9 @@ package cn.vision.invicloud.web.controller.system;
 
 import cn.vision.invicloud.support.entity.Customer;
 import cn.vision.invicloud.support.service.ICustomerService;
+import cn.vision.invicloud.web.common.WebResult;
+import cn.vision.invicloud.web.common.enums.CommonReturnCode;
+import cn.vision.invicloud.web.common.enums.RegisterReturnCode;
 import com.google.code.kaptcha.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +55,7 @@ public class RegisterController {
      */
     @PostMapping(value = "/register")
     @ResponseBody
-    public void register(@RequestParam("userName")String registerName,
+    public Object register(@RequestParam("userName")String registerName,
                         @RequestParam("password")String registerPassword,
                         @RequestParam("sex")Integer sex, //0==保密 1==男 2==女
                         @RequestParam("birthYear")Integer birthYear,
@@ -62,6 +65,10 @@ public class RegisterController {
         byte[] buff=Base64ToByteArr(imgString);
         String detectToken = InterfaceOfAllAPIs.detect(buff);
 
+        if(InterfaceOfAllAPIs.searchForUserId(buff,"FS_1")!=Key.KEY_FOR_SEARCH_MATCHFAILED_MESSAGE)
+        {
+            return new WebResult(RegisterReturnCode.FACE_REGISTER_TWICE);
+        }
         Calendar cal = Calendar.getInstance();
 
         Integer theCustomerId = customerService.getLastestPlusCustomerId()+1;//从数据库中获取最新的id + 1,即预备绑定给用户的id
@@ -78,6 +85,13 @@ public class RegisterController {
         customer.setStatus(0);
         customer.setTelephone(phoneNumber);
 
+
+        //识别不到人脸时
+        if(detectToken == Key.KEY_FOR_DETECT_FAILED_MESSAGE)
+        {
+            return new WebResult(RegisterReturnCode.REGISTER_FACE_NOT_DETECTED);
+        }
+
         try
         {
             String addLog = InterfaceOfAllAPIs.addOneFaceIntoFaceSet(detectToken,"FS_1");
@@ -87,6 +101,7 @@ public class RegisterController {
         catch(Exception e)
         {
             System.out.println("添加到人脸集合出错!");
+            return new WebResult(RegisterReturnCode.ADDTO_FACESET_FAILED);
         }
 
         try
@@ -97,9 +112,11 @@ public class RegisterController {
         catch(Exception e)
         {
             System.out.println("数据库操作异常！");
-        }
+            return new WebResult(RegisterReturnCode.ADDTO_DATABASE_FAILED);
+    }
 
 
+        return new WebResult(CommonReturnCode.SUCCESS);
 
     }
 
